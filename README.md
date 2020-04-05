@@ -7,6 +7,7 @@ cf.
   - https://qiita.com/oomri444/items/14b37502e7323edb10a8
 - http://murokaco.hatenablog.com/entry/2018/12/05/133510
 - https://tonari-it.com/gas-slack-create-app/
+- [はじめてのSlack Bot – 2018年版](https://blog.katsubemakito.net/bot/slackbot_1st)
 
 ## TOKEN
 
@@ -21,6 +22,10 @@ Slack に送信するための API endpoint
 Slack からデータを取得するための API
 
 [Outgoing WebHooksの設定](https://my.slack.com/services/new/outgoing-webhook/) からトークンを発行する
+
+### text
+
+テキスト内にメンションのあばあい `<@user_id>` の形で入ってくるっぽい
 
 ### SLACK_API_TOKEN
 
