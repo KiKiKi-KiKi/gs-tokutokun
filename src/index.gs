@@ -60,7 +60,7 @@ if (!Array.prototype.find) {
 
 const sendMessageToSlack = (slackApp) => (channelID) => (message) => {
   const botData = {
-    usename: 'tokutokun',
+    username: 'tokutokun',
     icon_url: 'https://avatars.slack-edge.com/2020-04-05/1044182029697_ee4e93831f2b8888cd65_512.png',
   };
 
@@ -163,14 +163,14 @@ function doPost(e) {
 
     if (!targetUserData) {
       addNewMember(targetUserName, 1, 0);
-      sendMessage(`${targetUserName} 徳 1pt 最初の徳です :tada:`);
+      sendMessage(`:tada:${targetUserName} arigato 1pt 最初の:thanks:がおくられました:tada:`);
     } else {
       const updateTargetUserData = incrementToku('toku')(targetUserData);
       const tokuName = updateTargetUserData[USER_DATA_INDEX.name];
       const newToku = updateTargetUserData[USER_DATA_INDEX.toku];
       // update sheet
       if ( updateToku('toku')( updateTargetUserData ) ) {
-        sendMessage(`${tokuName} 徳 ${newToku}pt`);
+        sendMessage(`:thanks:${tokuName} arigato ${newToku}pt`);
       } else {
         // fail to update
         sendMessage(`@KiKiKi Fail to update Toku ${tokuName} -> ${newToku}`)
