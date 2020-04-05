@@ -76,7 +76,7 @@ const addMemberRecord = (sheet) => (name = 'NoName', toku = 0, sendToku = 0) => 
   return addData;
 };
 
-// return range
+// return Range (Array)
 function getMemberData(sheet) {
   if (!sheet) { return []; }
   // typeof(range) =>> object
@@ -130,13 +130,12 @@ function doPost(e) {
 
     const reg = /\+\+ <\@(.*)>(.*)/;
     const toku_params = e.parameter.text.match(reg);
-    // testMessage(`24: ${e.parameter.text} ${JSON.stringify(e.parameter.text.match(/\+\+ <\@(name)>(.*)/))}`);
+    // testMessage(`${e.parameter.text} ${JSON.stringify(e.parameter.text.match(/\+\+ <\@(name)>(.*)/))}`);
     if (toku_params === null) {
       return;
     }
 
     const targetUserInfo = slackApp.usersInfo(toku_params[1]);
-    // testMessage(`24:targetUserInfo ${JSON.stringify(targetUserInfo)}`);
     // unexist user
     if (!targetUserInfo['ok']) {
       return;
@@ -151,26 +150,24 @@ function doPost(e) {
       return;
     }
 
-
     const targetUserName = targetUserInfo['user']['real_name'];
     const memberData = getMemberData(sheet);
     const addNewMember = addMemberRecord(sheet);
     const updateToku = updateTokuOnSheet(sheet);
-
 
     // Update TOKU
     const targetUserData = findMemberData(memberData, targetUserName);
 
     if (!targetUserData) {
       addNewMember(targetUserName, 1, 0);
-      sendMessage(`:tada:${targetUserName} arigato 1pt 最初の:thanks:がおくられました:tada:`);
+      sendMessage(`:tada:${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
     } else {
       const updateTargetUserData = incrementToku('toku')(targetUserData);
       const tokuName = updateTargetUserData[USER_DATA_INDEX.name];
       const newToku = updateTargetUserData[USER_DATA_INDEX.toku];
       // update sheet
       if ( updateToku('toku')( updateTargetUserData ) ) {
-        sendMessage(`:thanks:${tokuName} arigato ${newToku}pt`);
+        sendMessage(`:thanks:${tokuName} ${newToku}arigato`);
       } else {
         // fail to update
         sendMessage(`@KiKiKi Fail to update Toku ${tokuName} -> ${newToku}`)
