@@ -115,6 +115,33 @@ const updateTokuOnSheet = (sheet) => (target = 'toku') => (data) => {
   return range.getValue();
 };
 
+function sortListByToku(data) {
+  const index = USER_DATA_INDEX.toku;
+  const sortList = data.sort((a, b) => {
+    if( a[index] === b[index] ) { return 0; }
+    return a[index] > b[index] ? -1 : 1;
+  });
+  return sortList;
+}
+
+function getTokuList(sheet) {
+  const data = getMemberData(sheet);
+  if (!data.length) { return 'No data'; }
+
+  const sortList = sortListByToku(data);
+
+  let text = '';
+  sortList.forEach((item) => {
+    const name = item[USER_DATA_INDEX.name];
+    const toku = item[USER_DATA_INDEX.toku];
+    const send = item[USER_DATA_INDEX.sendToku];
+    text += `${name} ${toku}arigato (送った arigato ${send})\n`;
+  });
+
+  return text;
+}
+
+// for debug
 function testMessage(message) {
   const slackApp = SlackApp.create(SLACK_API_TOKEN);
   const sendMessage = sendMessageToSlack(slackApp)('徳-thanks');
@@ -127,6 +154,13 @@ function doPost(e) {
     const slackApp = SlackApp.create(SLACK_API_TOKEN);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName(SHEET_NAME);
+    const sendMessage = sendMessageToSlack(slackApp)(e.parameter.channel_id);
+
+    if (e.parameter.text.match(/\+\+ list$/)) {
+      const listText = getTokuList(sheet);
+      sendMessage(listText);
+      return;
+    }
 
     const reg = /\+\+ <\@(.*)>(.*)/;
     const toku_params = e.parameter.text.match(reg);
@@ -142,7 +176,6 @@ function doPost(e) {
     }
     const targetUserID = targetUserInfo['user']['id'];
     const sendUserID = e.parameter.user_id;
-    const sendMessage = sendMessageToSlack(slackApp)(e.parameter.channel_id);
 
     // don't allow self vote
     if (sendUserID === targetUserID) {
