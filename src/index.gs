@@ -150,8 +150,16 @@ function testMessage(message) {
   sendMessage(`GAS TEST: ${message}`);
 }
 
-function doPost(e) {
+const debugAddUsetID = (sheet) => (data) => (uid) => {
+  const row = data[USER_DATA_INDEX.index] + 1;
+  const col = USER_DATA_INDEX.uid + 1;
+  const range = sheet.getRange(row, col);
+  range.setValue(uid);
+  return;
+}
 
+// Main
+function doPost(e) {
   if (OUTGOING_TOKEN === e.parameter.token && e.parameter.trigger_word === '++') {
     const slackApp = SlackApp.create(SLACK_API_TOKEN);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -197,6 +205,11 @@ function doPost(e) {
       addNewMember(targetUserName, 1, 0, targetUserID);
       sendMessage(`:tada:${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
     } else {
+      // set uID
+      if ( !targetUserData[USER_DATA_INDEX.uid] ) {
+        debugAddUsetID(sheet)(targetUserData)(targetUserID);
+      }
+
       const updateTargetUserData = incrementToku('toku')(targetUserData);
       const tokuName = updateTargetUserData[USER_DATA_INDEX.name];
       const newToku = updateTargetUserData[USER_DATA_INDEX.toku];
@@ -217,6 +230,11 @@ function doPost(e) {
     if (!sendUserData) {
       addNewMember(sendUserName, 0, 1, sendUserID);
     } else {
+      // set uID
+      if ( !sendUserData[USER_DATA_INDEX.uid] ) {
+        debugAddUsetID(sheet)(sendUserInfo)(sendUserID);
+      }
+
       const updateTargetUserData = incrementToku('sendToku')(sendUserData);
       const sendTokuName = updateTargetUserData[USER_DATA_INDEX.name];
       const newSendToku = updateTargetUserData[USER_DATA_INDEX.sendToku];
