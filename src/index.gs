@@ -118,8 +118,7 @@ const addMemberRecord = (sheet) => (name = 'NoName', toku = 0, sendToku = 0, uid
   return addData;
 };
 
-function sortListByToku(data) {
-  const index = USER_DATA_INDEX.toku;
+const getSortUserList = (data) => (index) => {
   const sortList = data.sort((a, b) => {
     if( a[index] === b[index] ) { return 0; }
     return a[index] > b[index] ? -1 : 1;
@@ -131,14 +130,31 @@ function getTokuList(sheet) {
   const data = getMemberData(sheet);
   if (!data.length) { return 'No data'; }
 
-  const sortList = sortListByToku(data);
+  const sortList = getSortUserList(data)(USER_DATA_INDEX.toku);
 
   let text = '';
   sortList.forEach((item) => {
     const name = item[USER_DATA_INDEX.name];
     const toku = item[USER_DATA_INDEX.toku];
     const send = item[USER_DATA_INDEX.sendToku];
-    text += `${name} ${toku}arigato (送った arigato ${send})\n`;
+    text += `${name} ${toku} arigato (送った arigato ${send})\n`;
+  });
+
+  return text;
+}
+
+function getTokuSenderList(sheet) {
+  const data = getMemberData(sheet);
+  if (!data.length) { return 'No data'; }
+
+  const sortList = getSortUserList(data)(USER_DATA_INDEX.sendToku);
+
+  let text = '';
+  sortList.forEach((item) => {
+    const name = item[USER_DATA_INDEX.name];
+    const toku = item[USER_DATA_INDEX.toku];
+    const send = item[USER_DATA_INDEX.sendToku];
+    text += `${name} 送った arigato ${send} (${toku} arigato)\n`;
   });
 
   return text;
@@ -169,8 +185,13 @@ function doPost(e) {
 
     // show Toku List
     if (e.parameter.text.match(/\+\+ list$/)) {
-      const listText = getTokuList(sheet);
-      sendMessage(listText);
+      sendMessage( getTokuList(sheet) );
+      return;
+    }
+
+    // show Toku sender List
+    if (e.parameter.text.match(/\+\+ list sender$/)) {
+      sendMessage( getTokuSenderList(sheet) );
       return;
     }
 
