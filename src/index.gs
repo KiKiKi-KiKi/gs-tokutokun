@@ -93,6 +93,7 @@ const incrementToku = (target = 'toku') => (data) => {
   return userData;
 };
 
+// write to sheet
 const updateTokuOnSheet = (sheet) => (target = 'toku') => (data) => {
   if (!(target === 'toku' || target === 'sendToku')) {
     return false;
@@ -144,7 +145,7 @@ function getTokuList(sheet) {
 }
 
 // for debug
-function testMessage(message) {
+function debugTestMessage(message) {
   const slackApp = SlackApp.create(SLACK_API_TOKEN);
   const sendMessage = sendMessageToSlack(slackApp)('徳-thanks');
   sendMessage(`GAS TEST: ${message}`);
@@ -166,6 +167,7 @@ function doPost(e) {
     const sheet = ss.getSheetByName(SHEET_NAME);
     const sendMessage = sendMessageToSlack(slackApp)(e.parameter.channel_id);
 
+    // show Toku List
     if (e.parameter.text.match(/\+\+ list$/)) {
       const listText = getTokuList(sheet);
       sendMessage(listText);
@@ -174,7 +176,7 @@ function doPost(e) {
 
     const reg = /\+\+ <\@(.*)>(.*)/;
     const toku_params = e.parameter.text.match(reg);
-    // testMessage(`${e.parameter.text} ${JSON.stringify(e.parameter.text.match(/\+\+ <\@(name)>(.*)/))}`);
+    // debugTestMessage(`${e.parameter.text} ${JSON.stringify(e.parameter.text.match(/\+\+ <\@(name)>(.*)/))}`);
     if (toku_params === null) {
       return;
     }
