@@ -8,6 +8,7 @@ const USER_DATA_INDEX = {
   name: 1,
   toku: 2,
   sendToku: 3,
+  uid: 4,
 };
 
 // GAS don't have Array.prototypr.find method
@@ -67,20 +68,11 @@ const sendMessageToSlack = (slackApp) => (channelID) => (message) => {
   return slackApp.chatPostMessage(channelID, message, botData);
 };
 
-const addMemberRecord = (sheet) => (name = 'NoName', toku = 0, sendToku = 0) => {
-  // get last Row Num
-  const index = sheet.getLastRow();
-  const addData = [index, name, toku, sendToku];
-  // Add New Row
-  sheet.appendRow(addData);
-  return addData;
-};
-
 // return Range (Array)
 function getMemberData(sheet) {
   if (!sheet) { return []; }
   // typeof(range) =>> object
-  const range = sheet.getRange(2, 1, sheet.getLastRow() - 1, 4);
+  const range = sheet.getRange(2, 1, sheet.getLastRow() - 1, 5);
   // to Array
   return range.getValues();
 }
@@ -113,6 +105,16 @@ const updateTokuOnSheet = (sheet) => (target = 'toku') => (data) => {
   range.setValue(newToku);
 
   return range.getValue();
+};
+
+// Add New Record to sheet
+const addMemberRecord = (sheet) => (name = 'NoName', toku = 0, sendToku = 0, uid = null) => {
+  // get last Row Num
+  const index = sheet.getLastRow();
+  const addData = [index, name, toku, sendToku, uid];
+  // Add New Row
+  sheet.appendRow(addData);
+  return addData;
 };
 
 function sortListByToku(data) {
@@ -192,7 +194,7 @@ function doPost(e) {
     const targetUserData = findMemberData(memberData, targetUserName);
 
     if (!targetUserData) {
-      addNewMember(targetUserName, 1, 0);
+      addNewMember(targetUserName, 1, 0, targetUserID);
       sendMessage(`:tada:${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
     } else {
       const updateTargetUserData = incrementToku('toku')(targetUserData);
@@ -213,7 +215,7 @@ function doPost(e) {
     const sendUserData = findMemberData(memberData, sendUserName);
 
     if (!sendUserData) {
-      addNewMember(sendUserName, 0, 1);
+      addNewMember(sendUserName, 0, 1, sendUserID);
     } else {
       const updateTargetUserData = incrementToku('sendToku')(sendUserData);
       const sendTokuName = updateTargetUserData[USER_DATA_INDEX.name];
@@ -227,4 +229,3 @@ function doPost(e) {
   }
   return null;
 }
-
