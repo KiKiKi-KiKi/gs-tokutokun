@@ -77,9 +77,9 @@ function getMemberData(sheet) {
   return range.getValues();
 }
 
-// return data or undefined
-function findMemberData(range, name) {
-  return range.find((data) => data[USER_DATA_INDEX.name] === name);
+// return data | undefined
+const findMemberData = (range) => (target = 'uid') => (findVal) => {
+  return range.find((data) => data[USER_DATA_INDEX[target]] === findVal);
 }
 
 const incrementToku = (target = 'toku') => (data) => {
@@ -199,7 +199,8 @@ function doPost(e) {
     const updateToku = updateTokuOnSheet(sheet);
 
     // Update TOKU
-    const targetUserData = findMemberData(memberData, targetUserName);
+    // TODO: change find by uid
+    const targetUserData = findMemberData(memberData)('name')(targetUserName);
 
     if (!targetUserData) {
       addNewMember(targetUserName, 1, 0, targetUserID);
@@ -225,7 +226,8 @@ function doPost(e) {
     // Update SEND TOKU
     const sendUserInfo = slackApp.usersInfo(sendUserID);
     const sendUserName = sendUserInfo['user']['real_name'];
-    const sendUserData = findMemberData(memberData, sendUserName);
+    // TODO: change find by uid
+    const sendUserData = findMemberData(memberData)('name')(sendUserName);
 
     if (!sendUserData) {
       addNewMember(sendUserName, 0, 1, sendUserID);
