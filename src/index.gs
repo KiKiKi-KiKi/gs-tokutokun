@@ -239,7 +239,11 @@ function doPost(e) {
       const newToku = updateTargetUserData[USER_DATA_INDEX.toku];
       // update sheet
       if ( updateToku('toku')( updateTargetUserData ) ) {
-        sendMessage(`:thanks: ${tokuName} ${newToku} arigato`);
+        if ( newToku <= 1 ) {
+          sendMessage(`:tada: ${tokuName} ${newToku} arigato 最初の:thanks:がおくられました:tada:`);
+        } else {
+          sendMessage(`:thanks: ${tokuName} ${newToku} arigato`);
+        }
       } else {
         // fail to update
         sendMessage(`@KiKiKi Fail to update Toku ${tokuName} -> ${newToku}`)
