@@ -227,7 +227,7 @@ function doPost(e) {
 
     if (!targetUserData) {
       addNewMember(targetUserName, 1, 0, targetUserID);
-      sendMessage(`:tada:${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
+      sendMessage(`:tada: ${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
     } else {
       // set uID
       if ( !targetUserData[USER_DATA_INDEX.uid] ) {
@@ -239,7 +239,7 @@ function doPost(e) {
       const newToku = updateTargetUserData[USER_DATA_INDEX.toku];
       // update sheet
       if ( updateToku('toku')( updateTargetUserData ) ) {
-        sendMessage(`:thanks:${tokuName} ${newToku}arigato`);
+        sendMessage(`:thanks: ${tokuName} ${newToku} arigato`);
       } else {
         // fail to update
         sendMessage(`@KiKiKi Fail to update Toku ${tokuName} -> ${newToku}`)
