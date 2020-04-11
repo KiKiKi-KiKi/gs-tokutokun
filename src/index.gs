@@ -257,7 +257,7 @@ function doPost(e) {
     } else {
       // set uID
       if ( !sendUserData[USER_DATA_INDEX.uid] ) {
-        debugAddUsetID(sheet)(sendUserInfo)(sendUserID);
+        debugAddUsetID(sheet)(sendUserData)(sendUserID);
       }
 
       const updateTargetUserData = incrementToku('sendToku')(sendUserData);
