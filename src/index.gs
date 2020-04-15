@@ -93,6 +93,14 @@ const incrementToku = (target = 'toku') => (data) => {
   return userData;
 };
 
+const updateUserName = (sheet) => (data) => (name) => {
+  const row = data[USER_DATA_INDEX.index] + 1;
+  const col = USER_DATA_INDEX.name + 1;
+  const range = sheet.getRange(row, col);
+  range.setValue(name);
+  return;
+}
+
 // write to sheet
 const updateTokuOnSheet = (sheet) => (target = 'toku') => (data) => {
   if (!(target === 'toku' || target === 'sendToku')) {
@@ -229,9 +237,9 @@ function doPost(e) {
       addNewMember(targetUserName, 1, 0, targetUserID);
       sendMessage(`:tada: ${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
     } else {
-      // set uID
-      if ( !targetUserData[USER_DATA_INDEX.uid] ) {
-        debugAddUsetID(sheet)(targetUserData)(targetUserID);
+      // update user name
+      if ( targetUserData[USER_DATA_INDEX.name] !== targetUserName ) {
+        updateUserName(sheet)(targetUserData)(targetUserName);
       }
 
       const updateTargetUserData = incrementToku('toku')(targetUserData);
@@ -260,9 +268,9 @@ function doPost(e) {
     if (!sendUserData) {
       addNewMember(sendUserName, 0, 1, sendUserID);
     } else {
-      // set uID
-      if ( !sendUserData[USER_DATA_INDEX.uid] ) {
-        debugAddUsetID(sheet)(sendUserData)(sendUserID);
+      // update user name
+      if ( sendUserData[USER_DATA_INDEX.name] !== sendUserName ) {
+        updateUserName(sheet)(sendUserData)(sendUserName);
       }
 
       const updateTargetUserData = incrementToku('sendToku')(sendUserData);
