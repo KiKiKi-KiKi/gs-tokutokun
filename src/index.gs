@@ -134,6 +134,7 @@ const getSortUserList = (data) => (index) => {
   return sortList;
 }
 
+// generate list
 function getTokuList(sheet) {
   const data = getMemberData(sheet);
   if (!data.length) { return 'No data'; }
@@ -173,14 +174,6 @@ function debugTestMessage(message) {
   const slackApp = SlackApp.create(SLACK_API_TOKEN);
   const sendMessage = sendMessageToSlack(slackApp)('徳-thanks');
   sendMessage(`GAS TEST: ${message}`);
-}
-
-const debugAddUsetID = (sheet) => (data) => (uid) => {
-  const row = data[USER_DATA_INDEX.index] + 1;
-  const col = USER_DATA_INDEX.uid + 1;
-  const range = sheet.getRange(row, col);
-  range.setValue(uid);
-  return;
 }
 
 // Main
