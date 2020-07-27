@@ -15,7 +15,7 @@ const USER_DATA_INDEX = {
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
-    value: function(predicate) {
+    value: function (predicate) {
       // 1. Let O be ? ToObject(this value).
       if (this == null) {
         throw TypeError('"this" is null or not defined');
@@ -131,7 +131,7 @@ const addMemberRecord = (sheet) => (name = 'NoName', toku = 0, sendToku = 0, uid
 
 const getSortUserList = (data) => (index) => {
   const sortList = data.sort((a, b) => {
-    if( a[index] === b[index] ) { return 0; }
+    if (a[index] === b[index]) { return 0; }
     return a[index] > b[index] ? -1 : 1;
   });
   return sortList;
@@ -189,13 +189,13 @@ function doPost(e) {
 
     // show Toku List
     if (e.parameter.text.match(/\+\+ list$/)) {
-      sendMessage( getTokuList(sheet) );
+      sendMessage(getTokuList(sheet));
       return;
     }
 
     // show Toku sender List
     if (e.parameter.text.match(/\+\+ list sender$/)) {
-      sendMessage( getTokuSenderList(sheet) );
+      sendMessage(getTokuSenderList(sheet));
       return;
     }
 
@@ -234,7 +234,7 @@ function doPost(e) {
       sendMessage(`:tada: ${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
     } else {
       // update user name
-      if ( targetUserData[USER_DATA_INDEX.name] !== targetUserName ) {
+      if (targetUserData[USER_DATA_INDEX.name] !== targetUserName) {
         updateUserName(sheet)(targetUserData)(targetUserName);
       }
 
@@ -242,8 +242,8 @@ function doPost(e) {
       const tokuName = updateTargetUserData[USER_DATA_INDEX.name];
       const newToku = updateTargetUserData[USER_DATA_INDEX.toku];
       // update sheet
-      if ( updateToku('toku')( updateTargetUserData ) ) {
-        if ( newToku <= 1 ) {
+      if (updateToku('toku')(updateTargetUserData)) {
+        if (newToku <= 1) {
           sendMessage(`:tada: ${tokuName} ${newToku} arigato 最初の:thanks:がおくられました:tada:`);
         } else {
           sendMessage(`:thanks: ${tokuName} ${newToku} arigato`);
@@ -265,7 +265,7 @@ function doPost(e) {
       addNewMember(sendUserName, 0, 1, sendUserID);
     } else {
       // update user name
-      if ( sendUserData[USER_DATA_INDEX.name] !== sendUserName ) {
+      if (sendUserData[USER_DATA_INDEX.name] !== sendUserName) {
         updateUserName(sheet)(sendUserData)(sendUserName);
       }
 
@@ -273,7 +273,7 @@ function doPost(e) {
       const sendTokuName = updateTargetUserData[USER_DATA_INDEX.name];
       const newSendToku = updateTargetUserData[USER_DATA_INDEX.sendToku];
       // update sheet
-      if ( !updateToku('sendToku')( updateTargetUserData ) ) {
+      if (!updateToku('sendToku')(updateTargetUserData)) {
         // fail to update
         sendMessage(`@KiKiKi Fail to update SendToku ${sendTokuName} -> ${newSendToku}`)
       }
