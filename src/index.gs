@@ -71,8 +71,11 @@ const sendMessageToSlack = (slackApp) => (channelID) => (message) => {
 // return Range (Array)
 function getMemberData(sheet) {
   if (!sheet) { return []; }
-  // typeof(range) =>> object
-  const range = sheet.getRange(2, 1, sheet.getLastRow() - 1, 5);
+  // if rows < 1 getRange become Error.
+  const rows = sheet.getLastRow() - 1;
+  if (rows < 1) { return []; }
+  // typeof(range) => object
+  const range = sheet.getRange(2, 1, rows, 5);
   // to Array
   return range.getValues();
 }
