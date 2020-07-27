@@ -1,3 +1,9 @@
+# tokuokun
+
+![](https://github.com/KiKiKi-KiKi/gs-tokutokun/blob/master/assets/tokutokun-icon.png)
+
+TOKUTOKUN is a Slack bot which work on GAS with SpreadSheet.
+
 ## Create Slack Bot
 
 cf.
