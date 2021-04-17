@@ -146,7 +146,7 @@ function getTokuList(sheet) {
 
   const sortList = getSortUserList(data)(USER_DATA_INDEX.toku);
 
-  let text = '';
+  let text = ':thanks:\n';
   sortList.forEach((item) => {
     const name = item[USER_DATA_INDEX.name];
     const toku = item[USER_DATA_INDEX.toku];
@@ -163,7 +163,7 @@ function getTokuSenderList(sheet) {
 
   const sortList = getSortUserList(data)(USER_DATA_INDEX.sendToku);
 
-  let text = '';
+  let text = ':toku:\n';
   sortList.forEach((item) => {
     const name = item[USER_DATA_INDEX.name];
     const toku = item[USER_DATA_INDEX.toku];
@@ -233,7 +233,7 @@ function doPost(e) {
 
     if (!targetUserData) {
       addNewMember(targetUserName, 1, 0, targetUserID);
-      sendMessage(`:tada: ${targetUserName} 1arigato 最初の:thanks:がおくられました:tada:`);
+      sendMessage(`:tada: ${targetUserName} に最初の:thanks:がおくられました:tada:`);
     } else {
       // update user name
       if (targetUserData[USER_DATA_INDEX.name] !== targetUserName) {
