@@ -1,7 +1,9 @@
 const SLACK_API_TOKEN = PropertiesService.getScriptProperties().getProperty('SLACK_API_TOKEN');
 const OUTGOING_TOKEN = PropertiesService.getScriptProperties().getProperty('OUTGOING_TOKEN');
 const SPREADSHEET_ID = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
-const SHEET_NAME = 'record';
+const SHEET_NAME = PropertiesService.getScriptProperties().getProperty('SHEET_NAME');
+const SLACK_TEST_CHANNEL = PropertiesService.getScriptProperties().getProperty('SLACK_TEST_CHANNEL');
+
 // user Data [index, name, toku, sendToku]
 const USER_DATA_INDEX = {
   index: 0,
@@ -175,7 +177,7 @@ function getTokuSenderList(sheet) {
 // for debug
 function debugTestMessage(message) {
   const slackApp = SlackApp.create(SLACK_API_TOKEN);
-  const sendMessage = sendMessageToSlack(slackApp)('徳-thanks');
+  const sendMessage = sendMessageToSlack(slackApp)(SLACK_TEST_CHANNEL);
   sendMessage(`GAS TEST: ${message}`);
 }
 
