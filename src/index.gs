@@ -222,7 +222,7 @@ function doPost(e) {
       return;
     }
 
-    const targetUserName = targetUserInfo['user']['real_name'];
+    const targetUserName = targetUserInfo['user']['profile']['display_name'] || targetUserInfo['user']['real_name'];
     const memberData = getMemberData(sheet);
     const addNewMember = addMemberRecord(sheet);
     const updateToku = updateTokuOnSheet(sheet);
@@ -258,7 +258,7 @@ function doPost(e) {
 
     // Update SEND TOKU
     const sendUserInfo = slackApp.usersInfo(sendUserID);
-    const sendUserName = sendUserInfo['user']['real_name'];
+    const sendUserName = sendUserInfo['user']['profile']['display_name'] || sendUserInfo['user']['real_name'];
 
     // find sender data by uid
     const sendUserData = findMemberData(memberData)(sendUserInfo['user']['id'])();
