@@ -2,6 +2,7 @@ const SLACK_API_TOKEN = PropertiesService.getScriptProperties().getProperty('SLA
 const OUTGOING_TOKEN = PropertiesService.getScriptProperties().getProperty('OUTGOING_TOKEN');
 const SPREADSHEET_ID = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
 const SHEET_NAME = PropertiesService.getScriptProperties().getProperty('SHEET_NAME');
+const LOG_SHEET_NAME = PropertiesService.getScriptProperties().getProperty('LOG_SHEET_NAME') || 'log';
 const SLACK_TEST_CHANNEL = PropertiesService.getScriptProperties().getProperty('SLACK_TEST_CHANNEL');
 
 // user Data [index, name, toku, sendToku]
@@ -181,6 +182,13 @@ function debugTestMessage(message) {
   sendMessage(`GAS TEST: ${message}`);
 }
 
+// set log message to Sheet
+function setLogToSheet(message) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(LOG_SHEET_NAME);
+  sheet.appendRow([...message]);
+}
+
 // Main
 function doPost(e) {
   if (OUTGOING_TOKEN === e.parameter.token && e.parameter.trigger_word === '++') {
@@ -207,6 +215,9 @@ function doPost(e) {
     const toku_params = postesMessage.match(reg);
     // debugTestMessage(`${e.parameter.text} ${JSON.stringify(e.parameter.text.match(/\+\+ <\@(name)>(.*)/))}`);
     if (toku_params === null) {
+      console.log('no toku_params', JSON.stringify(e.parameter.text));
+      setLogToSheet(['no toku_params', JSON.stringify(e.parameter.text), e.parameter]);
+      sendMessage(`:sob: ごめんなさい :toku: を見つけられませんでした ><`);
       return;
     }
 
