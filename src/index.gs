@@ -189,20 +189,22 @@ function doPost(e) {
     const sheet = ss.getSheetByName(SHEET_NAME);
     const sendMessage = sendMessageToSlack(slackApp)(e.parameter.channel_id);
 
+    const postesMessage = e.parameter.text.replace(/\s/g, ' ');
+
     // show Toku List
-    if (e.parameter.text.match(/\+\+ list$/)) {
+    if (postesMessage.match(/\+\+ list$/)) {
       sendMessage(getTokuList(sheet));
       return;
     }
 
     // show Toku sender List
-    if (e.parameter.text.match(/\+\+ list sender$/)) {
+    if (postesMessage.match(/\+\+ list sender$/)) {
       sendMessage(getTokuSenderList(sheet));
       return;
     }
 
     const reg = /\+\+ <\@(.*)>(.*)/;
-    const toku_params = e.parameter.text.match(reg);
+    const toku_params = postesMessage.match(reg);
     // debugTestMessage(`${e.parameter.text} ${JSON.stringify(e.parameter.text.match(/\+\+ <\@(name)>(.*)/))}`);
     if (toku_params === null) {
       return;
