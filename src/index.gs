@@ -4,6 +4,7 @@ const SPREADSHEET_ID = PropertiesService.getScriptProperties().getProperty('SPRE
 const SHEET_NAME = PropertiesService.getScriptProperties().getProperty('SHEET_NAME');
 const LOG_SHEET_NAME = PropertiesService.getScriptProperties().getProperty('LOG_SHEET_NAME') || 'log';
 const SLACK_TEST_CHANNEL = PropertiesService.getScriptProperties().getProperty('SLACK_TEST_CHANNEL');
+const ADMIN_UER_NAME = PropertiesService.getScriptProperties().getProperty('ADMIN_UER_NAME');
 
 // user Data [index, name, toku, sendToku]
 const USER_DATA_INDEX = {
@@ -265,7 +266,7 @@ function doPost(e) {
         }
       } else {
         // fail to update
-        sendMessage(`@KiKiKi Fail to update Toku ${tokuName} -> ${newToku}`)
+        sendMessage(`Error: ${ADMIN_UER_NAME} Fail to update Toku ${tokuName} -> ${newToku}`)
       }
     }
 
@@ -290,7 +291,7 @@ function doPost(e) {
       // update sheet
       if (!updateToku('sendToku')(updateTargetUserData)) {
         // fail to update
-        sendMessage(`@KiKiKi Fail to update SendToku ${sendTokuName} -> ${newSendToku}`)
+        sendMessage(`Error: ${ADMIN_UER_NAME} Fail to update SendToku ${sendTokuName} -> ${newSendToku}`)
       }
     }
   }
